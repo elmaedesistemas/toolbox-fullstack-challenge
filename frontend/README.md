@@ -236,7 +236,7 @@ The Nginx configuration also supports single-page application fallback routing.
 The API base URL is defined in:
 
 ```text
-src/config.js
+src/config/index.js
 ```
 
 Default value:
@@ -270,7 +270,8 @@ frontend/
 │   │   ├── filesSlice.test.js
 │   │   └── index.js
 │   ├── App.jsx
-│   ├── config.js
+│   ├── config/
+│   │   └── index.js
 │   ├── index.jsx
 │   ├── setupTests.js
 │   └── styles.css
