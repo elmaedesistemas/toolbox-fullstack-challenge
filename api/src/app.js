@@ -1,20 +1,41 @@
 const express = require('express')
 const cors = require('cors')
+const ExternalFilesClient = require('./services/externalFilesClient')
+const FilesService = require('./services/filesService')
+const createFilesRouter = require('./routes/files')
 
-const app = express()
+function createApp (dependencies = {}) {
+  const externalFilesClient =
+        dependencies.externalFilesClient || new ExternalFilesClient()
 
-app.disable('x-powered-by')
-app.use(cors())
-app.use(express.json())
+  const filesService =
+        dependencies.filesService || new FilesService(externalFilesClient)
 
-app.get('/files/data', (request, response) => {
-  response.status(200).json([])
-})
+  const app = express()
 
-app.use((request, response) => {
-  response.status(404).json({
-    error: 'Not found'
+  app.disable('x-powered-by')
+  app.use(cors())
+  app.use(express.json())
+
+  app.use('/files', createFilesRouter(filesService))
+
+  app.use((req, res) => {
+    res.status(404).json({
+      error: 'Route not found'
+    })
   })
-})
 
-module.exports = app
+  app.use((error, req, res, next) => {
+    if (res.headersSent) {
+      return next(error)
+    }
+
+    res.status(502).json({
+      error: 'Unable to retrieve files from the external API'
+    })
+  })
+
+  return app
+};
+
+module.exports = createApp

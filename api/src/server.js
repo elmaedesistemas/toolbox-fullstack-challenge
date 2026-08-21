@@ -1,7 +1,8 @@
-const app = require('./app')
+const createApp = require('./app')
+const config = require('./config')
 
-const PORT = 3000
+const app = createApp()
 
-app.listen(PORT, () => {
-  console.log(`API listening on http://localhost:${PORT}`)
+app.listen(config.port, () => {
+    console.log(`API listening on port ${config.port}`)
 })
