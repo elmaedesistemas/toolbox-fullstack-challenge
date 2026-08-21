@@ -57,7 +57,7 @@ function App() {
         <>
             <Navbar bg='danger' variant='dark'>
                 <Container fluid>
-                    <Navbar.Brand>React Test App</Navbar.Brand>
+                    <Navbar.Brand>Toolbox Full Stack Challenge</Navbar.Brand>
                 </Container>
             </Navbar>
 
