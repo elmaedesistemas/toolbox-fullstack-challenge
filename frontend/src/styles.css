@@ -1,0 +1,27 @@
+body {
+    background-color: #f8f9fa;
+    margin: 0;
+}
+
+.page-container {
+    padding: 2rem;
+}
+
+.loading-container {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    min-height: 8rem;
+}
+
+.hex-value {
+    font-family: monospace;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 576px) {
+    .page-container {
+        padding: 1rem;
+    }
+}
