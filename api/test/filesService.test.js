@@ -111,4 +111,59 @@ describe('FilesService', () => {
       expect(error.message).to.equal('Unable to list files')
     }
   })
+
+  it('returns the available file list', async () => {
+    const externalFilesClient = {
+      listFiles: async () => ['file1.csv', 'file2.csv']
+    }
+
+    const service = new FilesService(externalFilesClient)
+    const result = await service.getAvailableFiles()
+
+    expect(result).to.deep.equal([
+      'file1.csv',
+      'file2.csv'
+    ])
+  })
+
+  it('downloads only the requested file', async () => {
+    const downloadedFiles = []
+
+    const externalFilesClient = {
+      listFiles: async () => ['file1.csv', 'file2.csv'],
+      downloadFile: async fileName => {
+        downloadedFiles.push(fileName)
+
+        return [
+          'file,text,number,hex',
+                    `${fileName},hello,123,70ad29aacf0b690b0467fe2b2767f765`
+        ].join('\n')
+      }
+    }
+
+    const service = new FilesService(externalFilesClient)
+    const result = await service.getFormattedFiles('file2.csv')
+
+    expect(downloadedFiles).to.deep.equal(['file2.csv'])
+    expect(result).to.have.lengthOf(1)
+    expect(result[0].file).to.equal('file2.csv')
+  })
+
+  it('returns an empty array when the requested file does not exist', async () => {
+    let downloadWasCalled = false
+
+    const externalFilesClient = {
+      listFiles: async () => ['file1.csv'],
+      downloadFile: async () => {
+        downloadWasCalled = true
+        return ''
+      }
+    }
+
+    const service = new FilesService(externalFilesClient)
+    const result = await service.getFormattedFiles('unknown.csv')
+
+    expect(result).to.deep.equal([])
+    expect(downloadWasCalled).to.equal(false)
+  })
 })
