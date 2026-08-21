@@ -26,5 +26,11 @@
     "chai-http": "^4.4.0",
     "mocha": "^9.2.2",
     "standard": "^16.0.4"
+  },
+  "standard": {
+    "env": [
+      "node",
+      "mocha"
+    ]
   }
 }
