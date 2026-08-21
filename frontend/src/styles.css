@@ -25,3 +25,7 @@ body {
         padding: 1rem;
     }
 }
+
+.file-filter {
+  max-width: 22rem;
+}
